@@ -1,21 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Home() {
-  const [location, setLocation] = useState({ lat: null, lon: null });
-  const [error, setError] = useState(null);
   const [savedLink, setSavedLink] = useState(null);
+  const [error, setError] = useState(null);
 
   const requestLocation = async () => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
           const { latitude, longitude } = pos.coords;
-          setLocation({ lat: latitude, lon: longitude });
-
           const mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
           setSavedLink(mapLink);
+          setError(null);
 
           try {
             const res = await fetch("/api/save-location", {
@@ -31,33 +29,24 @@ export default function Home() {
             console.error("Error sending to API:", err);
           }
         },
-        (err) => setError(err.message)
+        () => setError("Please turn on your location in settings.")
       );
     } else {
-      setError("Geolocation is not supported in this browser");
+      setError("Please turn on your location in settings.");
     }
   };
 
-  // Try auto-fetching location on page load
-  useEffect(() => {
-    requestLocation();
-  }, []);
-
   return (
     <div>
-      <h1>Saved Location</h1>
+      {savedLink && <p>{savedLink}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
-
-      <p>{savedLink || "No saved location found"}</p>
-
-      {/* Show button ONLY if location not detected */}
-      {!savedLink && (
+      {!savedLink && !error && (
         <button
           onClick={requestLocation}
           style={{ marginTop: "10px", padding: "8px 16px" }}
         >
-          Get My Location
+          Get My Current Location
         </button>
       )}
     </div>
