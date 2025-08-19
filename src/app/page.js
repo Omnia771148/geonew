@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const [location, setLocation] = useState({ lat: null, lon: null });
   const [error, setError] = useState(null);
   const [savedLink, setSavedLink] = useState(null);
 
-  const requestLocation = () => {
+  const requestLocation = async () => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
@@ -38,16 +38,28 @@ export default function Home() {
     }
   };
 
+  // Try auto-fetching location on page load
+  useEffect(() => {
+    requestLocation();
+  }, []);
+
   return (
     <div>
       <h1>Saved Location</h1>
+
       {error && <p style={{ color: "red" }}>Error: {error}</p>}
+
       <p>{savedLink || "No saved location found"}</p>
 
-   
-      <button onClick={requestLocation} style={{ marginTop: "10px", padding: "8px 16px" }}>
-        Get My Location
-      </button>
+      {/* Show button ONLY if location not detected */}
+      {!savedLink && (
+        <button
+          onClick={requestLocation}
+          style={{ marginTop: "10px", padding: "8px 16px" }}
+        >
+          Get My Location
+        </button>
+      )}
     </div>
   );
 }
