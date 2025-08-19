@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Home() {
   const [location, setLocation] = useState({ lat: null, lon: null });
   const [error, setError] = useState(null);
   const [savedLink, setSavedLink] = useState(null);
 
-  useEffect(() => {
+  const requestLocation = () => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
@@ -36,13 +36,18 @@ export default function Home() {
     } else {
       setError("Geolocation is not supported in this browser");
     }
-  }, []);
+  };
 
   return (
     <div>
       <h1>Saved Location</h1>
       {error && <p style={{ color: "red" }}>Error: {error}</p>}
       <p>{savedLink || "No saved location found"}</p>
+
+   
+      <button onClick={requestLocation} style={{ marginTop: "10px", padding: "8px 16px" }}>
+        Get My Location
+      </button>
     </div>
   );
 }
