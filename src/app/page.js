@@ -7,7 +7,7 @@ export default function Home() {
   const [error, setError] = useState(null);
 
   // Kurnool City boundary (not full district)
-  const minLat = 15.40;
+  const minLat = 15.77;
   const maxLat = 16.20;
   const minLon = 78.00;
   const maxLon = 78.12;
