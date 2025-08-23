@@ -6,11 +6,11 @@ export default function Home() {
   const [savedLink, setSavedLink] = useState(null);
   const [error, setError] = useState(null);
 
-  // Expanded Kurnool city bounding box
+  // Kurnool City boundary (not full district)
   const minLat = 15.78;
   const maxLat = 15.88;
-  const minLon = 77.98;
-  const maxLon = 78.09;
+  const minLon = 78.00;
+  const maxLon = 78.12;
 
   const requestLocation = async () => {
     if ("geolocation" in navigator) {
@@ -19,7 +19,7 @@ export default function Home() {
           const { latitude, longitude } = pos.coords;
           const mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
 
-          // Check if inside bounding box
+          // Check if inside city boundary
           const inside =
             latitude >= minLat &&
             latitude <= maxLat &&
@@ -38,13 +38,13 @@ export default function Home() {
               });
 
               const data = await res.json();
-              if (data.success) console.log("Location saved to MongoDB!");
-              else console.error("MongoDB save failed:", data.error);
+              if (data.success) console.log("✅ Location saved to MongoDB!");
+              else console.error("❌ MongoDB save failed:", data.error);
             } catch (err) {
               console.error("Error sending to API:", err);
             }
           } else {
-            setError("❌ You are outside Kurnool city premises");
+            setError("❌ You are outside Kurnool City premises");
             setSavedLink(null);
           }
         },
