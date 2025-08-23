@@ -6,11 +6,11 @@ export default function Home() {
   const [savedLink, setSavedLink] = useState(null);
   const [error, setError] = useState(null);
 
-  // Kurnool city bounding box
-  const minLat = 15.80;
-  const maxLat = 15.86;
-  const minLon = 78.00;
-  const maxLon = 78.07;
+  // Expanded Kurnool city bounding box
+  const minLat = 15.78;
+  const maxLat = 15.88;
+  const minLon = 77.98;
+  const maxLon = 78.09;
 
   const requestLocation = async () => {
     if ("geolocation" in navigator) {
